@@ -1,0 +1,23 @@
+@subtask samples
+manual 1.in
+
+@subtask s1
+manual a.in
+
+@subtask s2
+@include s1
+
+@subtask s3
+@include s1
+
+@subtask s4
+@include s1
+
+@subtask s5
+@include s1
+
+@subtask s6
+@include s1
+
+@subtask s7
+@include s1
