@@ -18,11 +18,11 @@ The game will give player $Q$ instructions on what to do and you, as the player,
 ### Input
 The first line consists of three space-seperated integers, $N, M, Q$.
 
-The second line consists of $M$ space-seperated integers, $a_1, a_2, \dots, a_M$
+The second line consists of $M$ space-seperated unique integers, $a_1, a_2, \dots, a_M$
 
 The next $N-1$ lines each consists of three space-seperated integers $u_i, v_i, l_i$.
 
-The final $q$ lines each consists of space-seperated integers depending on the instruction given, they may be:
+The final $Q$ lines each consists of space-seperated integers depending on the instruction given, they may be:
 + $1$, indicating instruction 1 is given.
 + $2$, indicating instruction 2 is given.
 + $3$ $t_i$, indicating instruction 3 is given.
@@ -38,7 +38,7 @@ For instruction 5, if a treasure is transported out of the system, print a line 
 For instruction 6, print a line with two integers representing report to such instruction or a single integer $-1$ if no treasure is at $d_i$.
 
 ### Constraints
-+ $2 \leq N \leq 10^6$
++ $2 \leq N \leq 2 \times 10^5$
 + $0 \leq M \leq 20$
 + $1 \leq Q \leq 2 \times 10^5$
 + $0 < a_i < N$
@@ -51,27 +51,23 @@ For instruction 6, print a line with two integers representing report to such in
 + $d_i$ is an advanced dungeon located in the direct route from current dungeon to dungeon $0$ in instruction 6.
 
 ## Subtasks
-### Subtask 1 (10 pts)
+### Subtask 1 (5 pts)
 + Only instructions 1 and 2 are given.
 
-### Subtask 2 (5 pts)
-+ Only instructions 1, 2 and 3 are given.
-+ $u_i+1 = v_i$
-
-### Subtask 3 (15 pts)
+### Subtask 2 (15 pts)
 + Only instructions 1, 2 and 3 are given.
 
-### Subtask 4 (10 pts)
+### Subtask 3 (10 pts)
 + Only instructions 1, 2 and 4 are given.
 
-### Subtask 5 (15 pts)
+### Subtask 4 (20 pts)
 + Only instructions 1, 2 and 5 are given.
 + $M = 0$
 
-### Subtask 6 (20 pts)
+### Subtask 5 (20 pts)
 + Only instructions 1, 2, 5 and 6 are given.
 
-### Subtask 7 (25 pts)
+### Subtask 6 (30 pts)
 + No other constraints.
 
 ## Sample Testcases
@@ -106,27 +102,106 @@ For instruction 6, print a line with two integers representing report to such in
 
 ### Sample Input 2
 ```
+4 2 11
+3 1
+0 2 3
+0 1 7
+0 3 5
+4
+1
+2
+4
+1
+2
+4
+1
+2
+4
+1
 ```
 
 
 ### Sample Output 2
 ```
+3
+2
+0
+5
+1
+0
+5
+3
+0
+-1
+-1
 ```
 
 ### Sample Input 3
 ```
+6 0 11
+
+0 1 5
+1 2 4
+2 3 3
+3 4 2
+4 5 1
+1
+5 1 10
+1
+5 2 20
+1
+1
+5 4 30
+5 4 25
+5 4 50
+2
+5 3 15
 ```
 
 ### Sample Output 3
 ```
+1
+2
+3
+4
+1 5
+3
+3 11
 ```
 
 ### Sample Input 4
 ```
+5 1 12
+1
+0 1 11
+0 2 4
+1 3 5
+1 4 14
+1
+5 1 12
+1
+5 3 20
+5 1 14
+2
+1
+5 4 25
+5 4 30
+6 1
+2
+2
 ```
 
 ### Sample Output 4
 ```
+1
+3
+1 1
+1
+4
+4 3
+7 1
+1
+0
 ```
 
 ## Hints

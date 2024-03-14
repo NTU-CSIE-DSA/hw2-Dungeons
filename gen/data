@@ -1,11 +1,21 @@
 @subtask samples
 manual 1.in
+manual 2.in
+manual 3.in
+manual 4.in
 
 @subtask s1
 manual a.in
+manual b.in
+gen_rand 200000 0 200000 0 1 1 0 0 0 0 0 1 aaaaa
+gen_rand 200000 0 200000 1 1 1 0 0 0 0 0 0 bbbbb
+gen_rand 200000 0 200000 1 1 1 0 0 0 0 0 1 ccccc
 
 @subtask s2
 @include s1
+gen_rand 200000 0 200000 0 1 1 10 0 0 0 0 1 aaa
+gen_rand 200000 20 200000 0 1 1 10 0 0 0 0 1 bbb
+gen_rand 200000 0 200000 1 1 1 10 0 0 0 0 1 ccc
 
 @subtask s3
 @include s1
@@ -17,7 +27,5 @@ manual a.in
 @include s1
 
 @subtask s6
-@include s1
-
-@subtask s7
-@include s1
+@include s5
+manual c.in

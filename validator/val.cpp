@@ -4,7 +4,7 @@ using namespace std;
 
 int main(){
     registerValidation();
-    int n = inf.readInt(2, 1e6, "n");
+    int n = inf.readInt(2, 2e5, "n");
     inf.readSpace();
     int m = inf.readInt(0, 20, "m");
     inf.readSpace();
@@ -13,11 +13,10 @@ int main(){
 
     set <int> a_list;
     while (m--){
-        int a;
-        inf.readInt(1, n-1, "a_i");
+        int a = inf.readInt(1, n-1, "a_i");
         ensure(a_list.find(a) == a_list.end());
         a_list.insert(a);
-        if (m >= 0) inf.readSpace();
+        if (m > 0) inf.readSpace();
     }
     inf.readEoln();
     set <int> v_list;
@@ -66,7 +65,7 @@ int main(){
         else if (op == 4){}
         else if (op == 5){
             inf.readSpace();
-            int d = inf.readInt(0, cur, "d_i");
+            int d = inf.readInt(1, cur, "d_i");
             ensure(anc.find(d) != anc.end());
             ensure(d == cur || a_list.find(d) != a_list.end());
 
@@ -75,9 +74,9 @@ int main(){
         }
         else if (op == 6){
             inf.readSpace();
-            int d = inf.readInt(0, cur, "d_i");
+            int d = inf.readInt(1, cur, "d_i");
             ensure(anc.find(d) != anc.end());
-            ensure(d == cur || a_list.find(d) != a_list.end());
+            ensure(a_list.find(d) != a_list.end());
         }
         inf.readEoln();
     }

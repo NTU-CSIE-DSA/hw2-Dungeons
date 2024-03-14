@@ -44,8 +44,8 @@ struct que* newQueue(int id, ll v, int dep){
 }
 
 bool isSpe[maxn], dep_isSpe[maxn];
-int sk[maxn];
-ll dep[maxn], dep_of[maxn];
+int sk[maxn], dep_of[maxn];
+ll dep[maxn];
 
 void pop_front(struct que* q){
     if (q->head == q->tail){
@@ -115,6 +115,12 @@ int main(){
         cur_queue[i] = NULL;
         head[i] = tail[i] = NULL;
     }
+    while (m--){
+        int s;
+
+        scanf("%d", &s);
+        isSpe[s] = true;
+    }
     for (int _=n;--_;){
         int u, v, w;
 
@@ -139,12 +145,6 @@ int main(){
         while ((--j) >= 0){
             tmp[j]->mn = tmp[j]->mn < tmp[j+1]->mn ? tmp[j]->mn : tmp[j+1]->mn;
         }
-    }
-    while (m--){
-        int s;
-
-        scanf("%d", &s);
-        isSpe[s] = true;
     }
     int cur = 0, cur_dep = 0;
     for (int t=0;t<q;++t){
