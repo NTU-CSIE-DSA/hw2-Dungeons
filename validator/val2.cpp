@@ -37,7 +37,6 @@ int main(){
 
     stack <int, vector<int>> sk;
     int cur = 0;
-    anc.insert(0);
     sk.push(0);
     while (q--){
         int op = inf.readInt(1, 3, "op_i");
