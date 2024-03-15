@@ -1,6 +1,7 @@
 /sandbox/
 /tests/
 /logs/
+/package/
 
 # C++.gitignore
 

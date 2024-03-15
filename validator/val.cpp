@@ -4,11 +4,11 @@ using namespace std;
 
 int main(){
     registerValidation();
-    int n = inf.readInt(2, 2e5, "n");
+    int n = inf.readInt(2, 1e6, "n");
     inf.readSpace();
     int m = inf.readInt(0, 20, "m");
     inf.readSpace();
-    int q = inf.readInt(1, 2e5, "q");
+    int q = inf.readInt(1, 1e6, "q");
     inf.readEoln();
 
     set <int> a_list;
@@ -20,7 +20,7 @@ int main(){
     }
     inf.readEoln();
     set <int> v_list;
-    vector<queue<int>> adj(n);
+    vector<queue<int, list<int>>> adj(n);
     for (int i=1;i<n;++i){
         int u = inf.readInt(0, n-2, "u_i");
         inf.readSpace();

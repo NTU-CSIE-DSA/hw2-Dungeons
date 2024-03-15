@@ -3,7 +3,7 @@
     "code": "Dungeons",
     "title": "A New Game",
     "memory_limit": 512,
-    "time_limit": 3.0,
+    "time_limit": 5.0,
     "type": "Batch",
     "description": "",
     "has_grader": false,

@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 typedef long long ll;
-#define maxn (int)(2e5+10)
+#define maxn (int)(1e6+10)
 
 struct child_node{
     struct child_node* nxt;

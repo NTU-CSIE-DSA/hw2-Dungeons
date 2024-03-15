@@ -7,25 +7,58 @@ manual 4.in
 @subtask s1
 manual a.in
 manual b.in
-gen_rand 200000 0 200000 0 1 1 0 0 0 0 0 1 aaaaa
-gen_rand 200000 0 200000 1 1 1 0 0 0 0 0 0 bbbbb
-gen_rand 200000 0 200000 1 1 1 0 0 0 0 0 1 ccccc
+gen_rand 2000 0 2000 0 1 1 0 0 0 0 0 1 0 aaaaa
+gen_rand 1000 0 1000000 1 1 1 0 0 0 0 0 0 0 bbbbb
+gen_rand 1000000 20 1000000 1 1 1 0 0 0 0 0 1 0 ccccc
+gen_rand 1000000 20 1000000 1 1 1 0 0 0 0 0 1 10000000 thisisachain
 
 @subtask s2
 @include s1
-gen_rand 200000 0 200000 0 1 1 10 0 0 0 0 1 aaa
-gen_rand 200000 20 200000 0 1 1 10 0 0 0 0 1 bbb
-gen_rand 200000 0 200000 1 1 1 10 0 0 0 0 1 ccc
+manual 1.in
+gen_rand 1000000 20 1000000 1 1 1 40 0 0 0 0 1 10000000 chain_bs
+gen_rand 2000 0 2000 0 1 1 10 0 0 0 0 0 0 aaa
+gen_rand 2000 20 2000 0 1 1 10 0 0 0 0 1 0 bbb
+gen_rand 1000000 0 1000000 1 1 1 10 0 0 0 0 1 0 ccc
+gen_rand 1000000 10 1000000 1 1 1 20 0 0 0 0 1 0 ddd
 
 @subtask s3
 @include s1
+manual 2.in
+gen_rand 100000 10 1000000 1 1 1 0 8 0 0 0 0 -10000 starlike
+gen_rand 80000 10 1000000 1 1 1 0 8 0 0 0 0 -1000000 star
+gen_rand 1000 20 1000000 0 1 1 0 10 0 0 0 0 0 aaa
+gen_rand 1000 20 1000000 0 1 1 0 10 0 0 0 1 0 bbb
+gen_rand 1000000 20 1000000 1 1 1 0 10 0 0 0 0 0 ccc
+gen_rand 1000000 20 1000000 1 1 1 0 10 0 0 0 1 0 ddd
 
 @subtask s4
 @include s1
+manual 3.in
+gen_rand 1000 0 1000000 0 1 1 0 0 10 0 0 1 0 aaa
+gen_rand 1000 0 1000000 1 30 1 0 0 30 0 0 1 10000000 chain
+gen_rand 1000000 0 1000000 1 30 1 0 0 30 0 0 1 10000000 chain2
+gen_rand 1000000 0 1000000 0 1 1 0 0 10 0 0 1 0 bbb
 
 @subtask s5
-@include s1
+@include s4
+manual 4.in
+gen_rand 1000 20 1000000 1 1 1 0 0 1 1 80 1 0 aaa
+gen_rand 1000000 20 1000000 0 1 1 0 0 10 1 80 1 0 bbb
+gen_rand 1000000 20 1000000 1 1 1 0 0 5 1 10 0 0 ccc
+gen_rand 1000000 20 1000000 1 1 1 0 0 5 1 60 1 0 ddd
+gen_rand 1000000 20 1000000 1 1 1 0 0 5 1 40 1 0 eee
+gen_rand 1000000 20 1000000 1 30 1 0 0 30 3 5 1 100000 chainlike
+gen_rand 1000000 20 1000000 1 30 1 0 0 30 3 5 1 100000 chainlike2
 
 @subtask s6
+@include s2
+@include s3
 @include s5
 manual c.in
+gen_rand 1000000 20 1000000 1 1 1 5 5 5 5 30 1 0 aa
+gen_rand 1000000 20 1000000 1 1 1 5 5 5 5 30 1 0 bb
+gen_rand 1000000 20 1000000 1 1 1 5 5 5 5 30 1 0 cc
+gen_rand 1000000 20 1000000 1 1 1 5 5 5 5 30 1 10 long
+gen_rand 1000000 20 1000000 1 1 1 5 5 5 5 30 1 100 verylong
+gen_rand 1000000 20 1000000 1 1 1 5 5 5 5 30 1 -10 flat
+gen_rand 1000000 20 1000000 1 1 1 5 5 5 5 30 1 -100 veryflat

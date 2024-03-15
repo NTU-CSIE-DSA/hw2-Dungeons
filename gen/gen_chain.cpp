@@ -14,7 +14,7 @@ int main(int argc, char* argv[]){
 
     int N = atoi(argv[1]), M = atoi(argv[2]), Q = atoi(argv[3]);
     bool toMax = atoi(argv[4]), trvEnt = atoi(argv[12]);
-    int adv_prob = atoi(argv[11]), elo = atoi(argv[13]);
+    int adv_prob = atoi(argv[11]);
     TArray<int> opc;
     for (int i=1;i<=6;++i){
         for (int _=0;_<atoi(argv[i+4]);++_) opc.push_back(i);
@@ -33,8 +33,8 @@ int main(int argc, char* argv[]){
     cout << a.shuffle() << '\n';
     auto edges = TArray<tuple<int, int, int>>(n-1);
     for (int i=0;i<n-1;++i){
+        get<0>(edges[i]) = i;
         get<1>(edges[i]) = i+1;
-        get<0>(edges[i]) = rnd.wnext(i+1, elo);
         get<2>(edges[i]) = rnd.next(1, (int)1e9);
     }
     edges = edges.shuffle();
@@ -66,11 +66,11 @@ int main(int argc, char* argv[]){
         }
         else if (op == 2){
             if (cur){
-                anc.erase(cur);
                 sk.pop();
                 cur = sk.top();
                 cur_dep -= adj[cur].front().second;
                 adj[cur].pop();
+                anc.erase(cur);
             }
         }
         else if (op == 3){
@@ -80,14 +80,14 @@ int main(int argc, char* argv[]){
         else if (op == 5){
             int d = cur;
 
-            if (!anc.empty() && rnd.next(100) < adv_prob) d = rnd.choice(anc);
+            if (!anc.empty() && rnd.next(100) < adv_prob) d = rnd.choice(a);
 
             cout << ' ' << d << ' ' << rnd.next(1ll, (long long)1e18);
         }
         else{
-            int d = rnd.choice(anc);
+            int d = rnd.choice(a);
 
-            cout << ' ' << d;
+            cout << ' ' << d << '\n';
         }
 
         cout << '\n';

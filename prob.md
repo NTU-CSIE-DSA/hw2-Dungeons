@@ -38,9 +38,9 @@ For instruction 5, if a treasure is transported out of the system, print a line 
 For instruction 6, print a line with two integers representing report to such instruction or a single integer $-1$ if no treasure is at $d_i$.
 
 ### Constraints
-+ $2 \leq N \leq 2 \times 10^5$
++ $2 \leq N \leq 10^6$
 + $0 \leq M \leq 20$
-+ $1 \leq Q \leq 2 \times 10^5$
++ $1 \leq Q \leq 10^6$
 + $0 < a_i < N$
 + $0 \leq u_i < v_i < N$, all the $v_i$ should form a permutaion of $1$ to $N-1$.
 + $0 < l_i \leq 10^9$
