@@ -3,7 +3,7 @@
 
 In each game, the map consists of $N$ dungeons where $M$ of them are **Advanced** Dungeons and player is initially located in dungeon $0$. After the game starts, $n-1$ pathways between dungeons $u_i, v_i$ where $u_i < v_i$ with length $l_i$ will appear one by one. Interestingly, for each dungeon $j$ except dungeon $0$, exactly one pathway with $v_i = j$ exists. Another interesting property about these pathways is that for each dungeon $j$, at most one pathway connecting to a dungeon with greater number is activated at the same time. If a pathway appears when there are no activated pathway connecting dungeon $u_i$ to a dungeon with greater number, the pathway is immediately activated. Once a pathway from $u_i$ to $v_i$ is deactivated, the first pathway connecting dungeon $u_i$ to a dungeon with greater number that have not been activated before is activated immediately.
 
-During your traversal, you might find some treasures with a large value. Since the dungeons are buried deep underground, the Advanced Dungeons Ascending (ADA) system is applied to transport the treasures. The system store treasures in the dungeons and each dungeon may store at most one treasure. When a treasure is being tried to store in a dungeon already with a treasure, the original one will be transported via an activated pathway to a dungeon with less number. If that dungeon already has a treasure too, this procedure will be applied recursively. When a treasure reaches dungeon $0$ though, it has been successfully escorted out of the system. You should report and remove it from the system. The advanced dungeons operate as a checkpoint for the treasures, treasures in them are monitered and sometimes new treasures are stored in them. However, this system operates at a cost. By transporting a treasure through a pathway, the value of a treasure is decreased by the length of such pathway. To help calculate these costs, you are sometimes required to search for the dungeon satisifying some criteria.
+During your traversal, you might find some treasures with a large value. Since the dungeons are buried deep underground, the Advanced Dungeons Ascending (ADA) system is applied to transport the treasures. The system store treasures in the dungeons and each dungeon may store at most one treasure. When a treasure is being tried to store in a dungeon already with a treasure, the original one will be transported via an activated pathway to a dungeon with less number. If that dungeon already has a treasure too, this procedure will be applied recursively. When a treasure reaches dungeon $0$ though, it has been successfully escorted out of the system. You should report and remove it from the system. The advanced dungeons operate as a checkpoint for the treasures, treasures in them are monitored and sometimes new treasures are stored in them. However, this system operates at a cost. By transporting a treasure through a pathway, the value of a treasure is decreased by the length of such pathway. To help calculate these costs, you are sometimes required to search for the dungeon satisfying some criteria.
 
 The game will give player $Q$ instructions on what to do and you, as the player, should follow them exactly. Otherwise, the head game developer Honey Toast Lin (HT Lin) will be mad and deduct your scores on DSA HW2 P4. There are six kinds of instructions that may be given to you:
 
@@ -16,13 +16,13 @@ The game will give player $Q$ instructions on what to do and you, as the player,
 
 
 ### Input
-The first line consists of three space-seperated integers, $N, M, Q$.
+The first line consists of three space-separated integers, $N, M, Q$.
 
-The second line consists of $M$ space-seperated unique integers, $a_1, a_2, \dots, a_M$
+The second line consists of $M$ space-separated unique integers, $a_1, a_2, \dots, a_M$
 
-The next $N-1$ lines each consists of three space-seperated integers $u_i, v_i, l_i$.
+The next $N-1$ lines each consists of three space-separated integers $u_i, v_i, l_i$.
 
-The final $Q$ lines each consists of space-seperated integers depending on the instruction given, they may be:
+The final $Q$ lines each consists of space-separated integers depending on the instruction given, they may be:
 + $1$, indicating instruction 1 is given.
 + $2$, indicating instruction 2 is given.
 + $3$ $t_i$, indicating instruction 3 is given.
@@ -42,7 +42,7 @@ For instruction 6, print a line with two integers representing report to such in
 + $0 \leq M \leq 20$
 + $1 \leq Q \leq 10^6$
 + $0 < a_i < N$
-+ $0 \leq u_i < v_i < N$, all the $v_i$ should form a permutaion of $1$ to $N-1$.
++ $0 \leq u_i < v_i < N$, all the $v_i$ should form a permutation of $1$ to $N-1$.
 + $0 < l_i \leq 10^9$
 + $0 \leq t_i \leq 10^{18}$
 + $0 \leq p_i \leq 10^{18}$
