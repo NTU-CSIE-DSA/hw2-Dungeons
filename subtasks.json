@@ -9,12 +9,14 @@
 		"s1": {
 			"index": 1,
 			"score": 5,
-			"text": "op 1, 2"
+			"text": "op 1, 2",
+            "validators": ["val1.cpp"]
 		},
         "s2": {
             "index": 2,
             "score": 15,
-            "text": "op 1, 2, 3"
+            "text": "op 1, 2, 3",
+            "validators": ["val2.cpp"]
         },
         "s3": {
             "index": 3,
@@ -24,12 +26,14 @@
         "s4": {
             "index": 4,
             "score": 20,
-            "text": "op 1, 2, 5, $m = 0$"
+            "text": "op 1, 2, 5, $m = 0$",
+            "validators": ["val4.cpp"]
         },
         "s5": {
             "index": 5,
             "score": 20,
-            "text": "op 1, 2, 5, 6"
+            "text": "op 1, 2, 5, 6",
+            "validators": ["val5.cpp"]
         },
 		"s6": {
 			"index": 6,

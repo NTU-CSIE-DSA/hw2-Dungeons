@@ -175,9 +175,9 @@ int main(){
             else printf("-1\n");
         }
         else if (op == 3){
-            int t;
+            ll t;
 
-            scanf("%d", &t);
+            scanf("%lld", &t);
             t = dep[cur_dep] - t;
             int l = 0, r = cur_dep;
             while (l != r){
@@ -192,9 +192,10 @@ int main(){
             else printf("%d\n", head[cur]->mn);
         }
         else if (op == 5){
-            int d, p;
+            int d;
+            ll p;
 
-            scanf("%d%d", &d, &p);
+            scanf("%d%lld", &d, &p);
             p -= dep[dep_of[d]];
             if (cur_queue[dep_of[d]] == NULL){
                 cur_queue[dep_of[d]] = newQueue(t, p, dep_of[d]);
