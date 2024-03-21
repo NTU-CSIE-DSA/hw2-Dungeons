@@ -46,7 +46,7 @@ gen_rand 1000000 0 1000000 1 1 1 0 0 20 0 0 -1000 stary
 @include s3
 @include s4
 manual 4.in
-gen_rand 1000000 20 1000000 0 1 1 5 5 5 0 1 0 aa
+gen_rand 1000000 0 1000000 0 1 1 5 5 5 0 1 0 aa
 gen_rand 1000000 0 1000000 0 1 1 5 5 5 0 1 0 bb
 gen_rand 1000000 0 1000000 1 1 1 5 5 5 0 1 0 cc
 gen_rand 1000000 0 1000000 1 1 1 5 5 5 0 1 10 long
