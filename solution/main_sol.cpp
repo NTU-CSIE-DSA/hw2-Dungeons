@@ -7,14 +7,13 @@ typedef long long ll;
 
 struct child_node{
     struct child_node* nxt;
-    int c, d, mn;
-}*head[maxn], *tail[maxn], *tmp[maxn];
+    int c, d;
+}*head[maxn], *tail[maxn];
 struct child_node* newChild(int c, int d){
     struct child_node* t = (struct child_node*) malloc(sizeof(struct child_node));
     t->nxt = NULL;
     t->c = c;
     t->d = d;
-    t->mn = d;
     return t;
 };
 
@@ -43,7 +42,6 @@ struct que* newQueue(int id, ll v, int dep){
     return t;
 }
 
-bool isSpe[maxn], dep_isSpe[maxn];
 int sk[maxn], dep_of[maxn];
 ll dep[maxn];
 
@@ -79,19 +77,8 @@ void push_front(struct que* q, int id, ll v){
     q->head = newQueueNode(q->head, id, v);
     q->head->nxt->prv = q->head;
     
-    if (q->top == 0 || dep_isSpe[q->top]){
-        if (q->top == 0){
-            printf("%d %lld\n", q->tail->id, q->tail->v);
-        }
-        else if (dep_isSpe[q->top]){
-            if (cur_queue[q->top] == NULL){
-                cur_queue[q->top] = newQueue(q->tail->id, q->tail->v, q->top);
-            }
-            else{
-                push_front(cur_queue[q->top], q->tail->id, q->tail->v);
-            }
-        }
-        
+    if (q->top == 0){
+        printf("%d %lld\n", q->tail->id, q->tail->v);
         pop_back(q);
         ++q->top;
     }
@@ -107,6 +94,43 @@ void push_front(struct que* q, int id, ll v){
     else cur_queue[q->top] = q;
 }
 
+struct mxc_node{
+    int c;
+    ll mxv;
+    struct mxc_node *prv, *nxt;
+}*mxc_head[maxn], *mxc_tail[maxn];
+struct mxc_node* newMxcNode(int c, ll v, struct mxc_node *prv){
+    struct mxc_node* t = (struct mxc_node*) malloc(sizeof(struct mxc_node));
+    t->c = c;
+    t->mxv = v;
+    t->prv = prv;
+    t->nxt = NULL;
+    return t;
+}
+void updatemx(int i, int c, ll v){
+    while (mxc_tail[i] != NULL && v > mxc_tail[i]->mxv){
+        struct mxc_node* tmp = mxc_tail[i];
+        mxc_tail[i] = mxc_tail[i]->prv;
+        free(tmp);
+    }
+
+    if (mxc_tail[i] == NULL){
+        mxc_head[i] = mxc_tail[i] = newMxcNode(c, v, NULL);
+    }
+    else{
+        mxc_tail[i]->nxt = newMxcNode(c, v, mxc_tail[i]);
+        mxc_tail[i] = mxc_tail[i]->nxt;
+    }
+}
+ll dfs(int x){
+    ll ans = 0;
+    for (struct child_node* c = head[x];c!=NULL;c=c->nxt){
+        updatemx(x, c->c, c->d + dfs(c->c));
+    }
+
+    return ans;
+}
+
 int main(){
     int n, m, q;
 
@@ -114,14 +138,9 @@ int main(){
     for (int i=0;i<n;++i){
         cur_queue[i] = NULL;
         head[i] = tail[i] = NULL;
+        mxc_head[i] = mxc_tail[i] = NULL;
     }
     while (m--){
-        int s;
-
-        scanf("%d", &s);
-        isSpe[s] = true;
-    }
-    for (int _=n;--_;){
         int u, v, w;
 
         scanf("%d%d%d", &u, &v, &w);
@@ -133,19 +152,7 @@ int main(){
             tail[u] = tail[u]->nxt;
         }
     }
-    for (int i=0;i<n;++i){
-        int j = 0;
-        struct child_node* cur = head[i];
-
-        while (cur != NULL){
-            tmp[j++] = cur;
-            cur = cur->nxt;
-        }
-        --j;
-        while ((--j) >= 0){
-            tmp[j]->mn = tmp[j]->mn < tmp[j+1]->mn ? tmp[j]->mn : tmp[j+1]->mn;
-        }
-    }
+    dfs(0);
     int cur = 0, cur_dep = 0;
     for (int t=0;t<q;++t){
         int op;
@@ -158,7 +165,6 @@ int main(){
                 cur = head[cur]->c;
                 sk[++cur_dep] = cur;
                 dep_of[cur] = cur_dep;
-                dep_isSpe[cur_dep] = isSpe[cur];
             }
             else printf("-1\n");
         }
@@ -169,7 +175,16 @@ int main(){
                 }
 
                 cur = sk[--cur_dep];
+                if (mxc_head[cur]->c == head[cur]->c){
+                    struct mxc_node* tmp = mxc_head[cur];
+                    mxc_head[cur] = mxc_head[cur]->nxt;
+                    free(tmp);
+
+                    if (mxc_head[cur] == NULL) mxc_tail[cur] = NULL;
+                }
+                struct child_node* tmp = head[cur];
                 head[cur] = head[cur]->nxt;
+                free(tmp);
                 printf("%d\n", cur);
             }
             else printf("-1\n");
@@ -188,29 +203,32 @@ int main(){
             printf("%d\n", sk[l]);
         }
         else if (op == 4){
-            if (head[cur] == NULL) printf("-1\n");
-            else printf("%d\n", head[cur]->mn);
+            if (head[cur] == NULL) printf("0\n");
+            else printf("%lld\n", mxc_head[cur]->mxv);
         }
         else if (op == 5){
-            int d;
             ll p;
 
-            scanf("%d%lld", &d, &p);
-            p -= dep[dep_of[d]];
-            if (cur_queue[dep_of[d]] == NULL){
-                cur_queue[dep_of[d]] = newQueue(t, p, dep_of[d]);
+            scanf("%lld", &p);
+            p -= dep[cur_dep];
+            if (cur_queue[cur_dep] == NULL){
+                cur_queue[cur_dep] = newQueue(t, p, cur_dep);
             }
             else{
-                push_front(cur_queue[dep_of[d]], t, p);
+                push_front(cur_queue[cur_dep], t, p);
             }
         }
-        else if (op == 6){
-            int d;
+        else{
+            int v, l;
 
-            scanf("%d", &d);
-            if (cur_queue[dep_of[d]] == NULL)  printf("-1\n");
+            scanf("%d%d", &v, &l);
+            if (head[cur] == NULL){
+                head[cur] = tail[cur] = newChild(v, l);
+            }
             else{
-                printf("%d %lld\n", cur_queue[dep_of[d]]->head->id, cur_queue[dep_of[d]]->head->v + dep_of[d]);
+                tail[cur]->nxt = newChild(v, l);
+                tail[cur] = tail[cur]->nxt;
+                updatemx(cur, v, l);
             }
         }
     }
