@@ -21,7 +21,7 @@ int main(int argc, char* argv[]){
     }
 
     int n = rnd.next(2, N);
-    int m = rnd.next(n-1-Mms, n-1), q = rnd.next(1, Q);
+    int m = rnd.next(max(0, n-1-Mms), n-1), q = rnd.next(1, Q);
     if (toMax){
         n = N;
         m = n-1 - Mms;
