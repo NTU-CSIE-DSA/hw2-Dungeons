@@ -19,13 +19,11 @@ struct child_node* newChild(int c, int d){
 
 struct queue_node{
     struct queue_node *prv, *nxt;
-    int id;
     ll v;
 };
-struct queue_node* newQueueNode(struct queue_node* oriHead, int id, ll v){
+struct queue_node* newQueueNode(struct queue_node* oriHead, ll v){
     struct queue_node* t = (struct queue_node*) malloc(sizeof(struct queue_node));
     t->nxt = oriHead;
-    t->id = id;
     t->v = v;
     return t;
 }
@@ -34,10 +32,10 @@ struct que{
     struct queue_node *head, *tail;
     int top, bot;
 }*cur_queue[maxn];
-struct que* newQueue(int id, ll v, int dep){
+struct que* newQueue(ll v, int dep){
     struct que* t = (struct que*) malloc(sizeof(struct que));
     t->bot = t->top = dep;
-    t->head = t->tail = newQueueNode(NULL, id, v);
+    t->head = t->tail = newQueueNode(NULL, v);
     t->head->nxt = t->head->prv = NULL;
     return t;
 }
@@ -72,18 +70,18 @@ void pop_back(struct que* q){
         q->tail->nxt = NULL;
     }
 }
-void push_front(struct que* q, int id, ll v){
+void push_front(struct que* q, ll v){
     --q->top;
-    q->head = newQueueNode(q->head, id, v);
+    q->head = newQueueNode(q->head, v);
     q->head->nxt->prv = q->head;
     
     if (q->top == 0){
-        printf("%d %lld\n", q->tail->id, q->tail->v);
+        printf("%lld\n", q->tail->v);
         pop_back(q);
         ++q->top;
     }
     else if (cur_queue[q->top] != NULL){
-        push_front(cur_queue[q->top], q->tail->id, q->tail->v);
+        push_front(cur_queue[q->top], q->tail->v);
         pop_back(q);
         q->tail->nxt = cur_queue[q->top]->head;
         cur_queue[q->top]->head->prv = q->tail;
@@ -154,7 +152,7 @@ int main(){
     }
     dfs(0);
     int cur = 0, cur_dep = 0;
-    for (int t=0;t<q;++t){
+    while (q--){
         int op;
 
         scanf("%d", &op);
@@ -213,10 +211,10 @@ int main(){
             scanf("%lld", &p);
             p -= dep[cur_dep];
             if (cur_queue[cur_dep] == NULL){
-                cur_queue[cur_dep] = newQueue(t, p, cur_dep);
+                cur_queue[cur_dep] = newQueue(p, cur_dep);
             }
             else{
-                push_front(cur_queue[cur_dep], t, p);
+                push_front(cur_queue[cur_dep], p);
             }
         }
         else{
