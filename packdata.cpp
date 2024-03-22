@@ -20,7 +20,7 @@ int main(int argc, char *argv[]){
         else tcs.push_back(vector<string>(1, tc));
         pst = st;
     }
-    int points[7] = {0, 5, 15, 10, 20, 20, 30};
+    int points[7] = {0, 10, 15, 25, 25, 25, 20};
 
     ofstream meta;
     meta.open("./package/meta.json");
