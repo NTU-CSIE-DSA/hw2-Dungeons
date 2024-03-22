@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <cassert>
 
 typedef long long ll;
 #define maxn (int)(1e6+10)
@@ -109,8 +108,7 @@ struct mxc_node* newMxcNode(int c, ll v, struct mxc_node *prv){
     return t;
 }
 void updatemx(int i, int c, ll v){
-    while (mxc_tail[i] != NULL){
-        if (v <= mxc_tail[i]->mxv) break;
+    while (mxc_tail[i] != NULL && v > mxc_tail[i]->mxv){
         struct mxc_node* tmp = mxc_tail[i];
         mxc_tail[i] = mxc_tail[i]->prv;
         free(tmp);

@@ -55,19 +55,23 @@ For instruction 6, print a line with two integers representing report to such in
 ## Subtasks
 ### Subtask 1 (5 pts)
 + Only instructions 1 and 2 are given.
++ $M = N-1$
 
 ### Subtask 2 (15 pts)
 + Only instructions 1, 2 and 3 are given.
++ $M = N-1$
 
 ### Subtask 3 (10 pts)
 + Only instructions 1, 2 and 4 are given.
++ $M = N-1$
 
 ### Subtask 4 (20 pts)
 + Only instructions 1, 2 and 5 are given.
-+ $M = 0$
++ $M = N-1$
 
 ### Subtask 5 (20 pts)
-+ Only instructions 1, 2, 5 and 6 are given.
++ Only instructions 1, 2, 3, 4 and 5 are given.
++ $M = N-1$
 
 ### Subtask 6 (30 pts)
 + No other constraints.
@@ -76,7 +80,7 @@ For instruction 6, print a line with two integers representing report to such in
 
 ### Sample Input 1
 ```
-4 0 8
+4 3 8
 0 1 2
 0 2 5
 1 3 2
@@ -104,8 +108,7 @@ For instruction 6, print a line with two integers representing report to such in
 
 ### Sample Input 2
 ```
-4 2 11
-3 1
+4 3 11
 0 2 3
 0 1 7
 0 3 5
@@ -140,8 +143,7 @@ For instruction 6, print a line with two integers representing report to such in
 
 ### Sample Input 3
 ```
-6 0 11
-
+6 5 11
 0 1 5
 1 2 4
 2 3 3
@@ -173,36 +175,33 @@ For instruction 6, print a line with two integers representing report to such in
 
 ### Sample Input 4
 ```
-5 1 12
+5 2 12
+0 1 4
+1 4 5
+4
+6 2 11
 1
-0 1 11
-0 2 4
-1 3 5
-1 4 14
+5 10
+3 4
+5 8
 1
-5 1 12
-1
-5 3 20
-5 1 14
+5 49
+5 0
 2
-1
-5 4 25
-5 4 30
-6 1
-2
-2
+5 1
+4
 ```
 
 ### Sample Output 4
 ```
+9
 1
-3
-1 1
-1
+0
+3 6
 4
-4 3
-7 1
+5 4
 1
+7 40
 0
 ```
 
