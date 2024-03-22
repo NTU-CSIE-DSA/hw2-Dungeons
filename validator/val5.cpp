@@ -28,7 +28,7 @@ int main(){
     int cur = 0;
     sk.push(0);
     while (q--){
-        int op = inf.readInt(1, 2, "op_i");
+        int op = inf.readInt(1, 5, "op_i");
 
         if (op == 1){
             if (!adj[cur].empty()){
