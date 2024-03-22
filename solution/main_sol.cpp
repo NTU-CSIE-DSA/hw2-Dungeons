@@ -19,11 +19,13 @@ struct child_node* newChild(int c, int d){
 
 struct queue_node{
     struct queue_node *prv, *nxt;
+    int ori;
     ll v;
 };
-struct queue_node* newQueueNode(struct queue_node* oriHead, ll v){
+struct queue_node* newQueueNode(struct queue_node* oriHead, int ori, ll v){
     struct queue_node* t = (struct queue_node*) malloc(sizeof(struct queue_node));
     t->nxt = oriHead;
+    t->ori = ori;
     t->v = v;
     return t;
 }
@@ -32,10 +34,10 @@ struct que{
     struct queue_node *head, *tail;
     int top, bot;
 }*cur_queue[maxn];
-struct que* newQueue(ll v, int dep){
+struct que* newQueue(int ori, ll v, int dep){
     struct que* t = (struct que*) malloc(sizeof(struct que));
     t->bot = t->top = dep;
-    t->head = t->tail = newQueueNode(NULL, v);
+    t->head = t->tail = newQueueNode(NULL, ori, v);
     t->head->nxt = t->head->prv = NULL;
     return t;
 }
@@ -70,18 +72,18 @@ void pop_back(struct que* q){
         q->tail->nxt = NULL;
     }
 }
-void push_front(struct que* q, ll v){
+void push_front(struct que* q, int ori, ll v){
     --q->top;
-    q->head = newQueueNode(q->head, v);
+    q->head = newQueueNode(q->head, ori, v);
     q->head->nxt->prv = q->head;
     
     if (q->top == 0){
-        printf("%lld\n", q->tail->v);
+        printf("%d %lld\n", q->tail->ori, q->tail->v);
         pop_back(q);
         ++q->top;
     }
     else if (cur_queue[q->top] != NULL){
-        push_front(cur_queue[q->top], q->tail->v);
+        push_front(cur_queue[q->top], q->tail->ori, q->tail->v);
         pop_back(q);
         q->tail->nxt = cur_queue[q->top]->head;
         cur_queue[q->top]->head->prv = q->tail;
@@ -211,10 +213,10 @@ int main(){
             scanf("%lld", &p);
             p -= dep[cur_dep];
             if (cur_queue[cur_dep] == NULL){
-                cur_queue[cur_dep] = newQueue(p, cur_dep);
+                cur_queue[cur_dep] = newQueue(cur, p, cur_dep);
             }
             else{
-                push_front(cur_queue[cur_dep], p);
+                push_front(cur_queue[cur_dep], cur, p);
             }
         }
         else{
