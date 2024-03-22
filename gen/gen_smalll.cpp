@@ -35,7 +35,7 @@ int main(int argc, char* argv[]){
     for (int i=0;i<n-1;++i){
         get<1>(edges[i]) = i+1;
         get<0>(edges[i]) = rnd.wnext(i+1, elo);
-        get<2>(edges[i]) = rnd.next(0, 100);
+        get<2>(edges[i]) = rnd.next(1, 100);
     }
     edges = edges.shuffle();
     vector<queue<pair<int,int>, list<pair<int,int>>>> adj(n);
