@@ -61,8 +61,12 @@ gen_rand 1000000 0 1000000 0 1 1 5 5 5 0 1 0 bb
 gen_rand 1000000 0 1000000 1 1 1 5 5 5 0 1 0 cc
 gen_rand 1000000 0 1000000 1 3 1 5 5 5 0 0 10 long
 gen_rand 1000000 0 1000000 1 1 1 5 5 5 0 1 100 verylong
+gen_rand 500000 0 1000000 1 3 1 5 5 5 0 1 100 verylong
 gen_rand 1000000 0 1000000 1 1 1 5 5 5 0 1 -10 flat
 gen_rand 1000000 0 1000000 1 1 1 5 5 5 0 1 -100 veryflat
+gen_rand 500000 0 1000000 1 3 1 5 5 5 0 1 -100 veryflat
+gen_maxl 1000000 0 1000000 1 3 1 10 1 10 0 0 500 chainymaxl
+gen_maxl 500000 0 1000000 1 3 1 10 1 10 0 0 500 chainymaxl2
 
 
 @subtask s6
