@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <cassert>
 
 typedef long long ll;
 #define maxn (int)(1e6+10)
@@ -108,7 +109,8 @@ struct mxc_node* newMxcNode(int c, ll v, struct mxc_node *prv){
     return t;
 }
 void updatemx(int i, int c, ll v){
-    while (mxc_tail[i] != NULL && v > mxc_tail[i]->mxv){
+    while (mxc_tail[i] != NULL){
+        if (v <= mxc_tail[i]->mxv) break;
         struct mxc_node* tmp = mxc_tail[i];
         mxc_tail[i] = mxc_tail[i]->prv;
         free(tmp);
@@ -123,12 +125,12 @@ void updatemx(int i, int c, ll v){
     }
 }
 ll dfs(int x){
-    ll ans = 0;
     for (struct child_node* c = head[x];c!=NULL;c=c->nxt){
         updatemx(x, c->c, c->d + dfs(c->c));
     }
 
-    return ans;
+    if (mxc_head[x] == NULL) return 0;
+    else return mxc_head[x]->mxv;
 }
 
 int main(){
@@ -181,6 +183,7 @@ int main(){
                     free(tmp);
 
                     if (mxc_head[cur] == NULL) mxc_tail[cur] = NULL;
+                    else mxc_head[cur]->prv = NULL;
                 }
                 struct child_node* tmp = head[cur];
                 head[cur] = head[cur]->nxt;
@@ -204,7 +207,7 @@ int main(){
         }
         else if (op == 4){
             if (head[cur] == NULL) printf("0\n");
-            else printf("%lld\n", mxc_head[cur]->mxv);
+            else {printf("%lld\n", mxc_head[cur]->mxv);}
         }
         else if (op == 5){
             ll p;
@@ -228,8 +231,8 @@ int main(){
             else{
                 tail[cur]->nxt = newChild(v, l);
                 tail[cur] = tail[cur]->nxt;
-                updatemx(cur, v, l);
             }
+            updatemx(cur, v, l + dfs(v));
         }
     }
 }

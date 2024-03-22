@@ -32,8 +32,6 @@ int main(int argc, char* argv[]){
     // auto a = TArray<int>::randomUnique(m, n);
     // cout << a.shuffle() << '\n';
     auto edges = TArray<tuple<int, int, int>>(n-1);
-    set <int> noParents;
-    for (int i=1;i<n;++i) noParents.insert(i);
     for (int i=0;i<n-1;++i){
         get<1>(edges[i]) = i+1;
         get<0>(edges[i]) = rnd.wnext(i+1, elo);
@@ -85,6 +83,7 @@ int main(int argc, char* argv[]){
         }
         else if (op == 6){
             cout << ' ' << unassigned[cur].front().first << ' ' << unassigned[cur].front().second;
+            adj[cur].push(unassigned[cur].front());
             unassigned[cur].pop();
         }
 
