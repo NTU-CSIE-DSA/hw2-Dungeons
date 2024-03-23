@@ -38,7 +38,7 @@ int main(int argc, char* argv[]){
         get<2>(edges[i]) = rnd.next(1, (int)1e9);
     }
     sort(edges.begin(), edges.end(), [](tuple<int, int, int> a, tuple<int, int, int> b){
-        return get<2>(a) > get<1>(b);
+        return get<2>(a) > get<2>(b);
     });
     vector<queue<pair<int,int>, list<pair<int,int>>>> adj(n);
     for (int i=0;i<m;++i){
