@@ -19,13 +19,13 @@ struct child_node* newChild(int c, int d){
 
 struct queue_node{
     struct queue_node *prv, *nxt;
-    int ori;
+    int neg_d;
     ll v;
 };
-struct queue_node* newQueueNode(struct queue_node* oriHead, int ori, ll v){
+struct queue_node* newQueueNode(struct queue_node* oriHead, int neg_d, ll v){
     struct queue_node* t = (struct queue_node*) malloc(sizeof(struct queue_node));
     t->nxt = oriHead;
-    t->ori = ori;
+    t->neg_d = neg_d;
     t->v = v;
     return t;
 }
@@ -34,10 +34,10 @@ struct que{
     struct queue_node *head, *tail;
     int top, bot;
 }*cur_queue[maxn];
-struct que* newQueue(int ori, ll v, int dep){
+struct que* newQueue(int neg_d, ll v, int dep){
     struct que* t = (struct que*) malloc(sizeof(struct que));
     t->bot = t->top = dep;
-    t->head = t->tail = newQueueNode(NULL, ori, v);
+    t->head = t->tail = newQueueNode(NULL, neg_d, v);
     t->head->nxt = t->head->prv = NULL;
     return t;
 }
@@ -72,18 +72,19 @@ void pop_back(struct que* q){
         q->tail->nxt = NULL;
     }
 }
-void push_front(struct que* q, int ori, ll v){
+void push_front(struct que* q, int neg_d, ll v){
     --q->top;
-    q->head = newQueueNode(q->head, ori, v);
+    q->head = newQueueNode(q->head, neg_d, v);
     q->head->nxt->prv = q->head;
     
     if (q->top == 0){
-        printf("%d %lld\n", q->tail->ori, q->tail->v);
+        if (q->tail->v >= 0) printf("value remaining is %lld\n", q->tail->v);
+        else printf("value lost at %d\n", q->tail->neg_d);
         pop_back(q);
         ++q->top;
     }
     else if (cur_queue[q->top] != NULL){
-        push_front(cur_queue[q->top], q->tail->ori, q->tail->v);
+        push_front(cur_queue[q->top], q->tail->neg_d, q->tail->v);
         pop_back(q);
         q->tail->nxt = cur_queue[q->top]->head;
         cur_queue[q->top]->head->prv = q->tail;
@@ -129,6 +130,16 @@ ll dfs(int x){
 
     if (mxc_head[x] == NULL) return 0;
     else return mxc_head[x]->mxv;
+}
+
+int bin_search(ll x, int cur_dep){
+    int l = 0, r = cur_dep;
+    while (l != r){
+        int m = (l + r) / 2;
+        if (dep[m] >= x) r = m;
+        else l = m + 1;
+    }
+    return l;
 }
 
 int main(){
@@ -194,14 +205,7 @@ int main(){
             ll t;
 
             scanf("%lld", &t);
-            t = dep[cur_dep] - t;
-            int l = 0, r = cur_dep;
-            while (l != r){
-                int m = (l + r) / 2;
-                if (dep[m] >= t) r = m;
-                else l = m + 1;
-            }
-            printf("%d\n", sk[l]);
+            printf("%d\n", sk[bin_search(dep[cur_dep] - t, cur_dep)]);
         }
         else if (op == 4){
             if (head[cur] == NULL) printf("0\n");
@@ -211,12 +215,13 @@ int main(){
             ll p;
 
             scanf("%lld", &p);
+            int neg_id = bin_search(dep[cur_dep] - p, cur_dep);
             p -= dep[cur_dep];
             if (cur_queue[cur_dep] == NULL){
-                cur_queue[cur_dep] = newQueue(cur, p, cur_dep);
+                cur_queue[cur_dep] = newQueue(neg_id ? sk[neg_id - 1] : -1, p, cur_dep);
             }
             else{
-                push_front(cur_queue[cur_dep], cur, p);
+                push_front(cur_queue[cur_dep], neg_id ? sk[neg_id - 1] : -1, p);
             }
         }
         else{
