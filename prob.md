@@ -1,5 +1,5 @@
 ## Problem Description
-Please refer to the problem statement on NTU COOL.
+Please refer to the PDF on NTU COOL.
 
 ## Sample Testcases
 
