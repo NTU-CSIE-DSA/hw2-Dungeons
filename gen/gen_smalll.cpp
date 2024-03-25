@@ -79,7 +79,7 @@ int main(int argc, char* argv[]){
         }
         else if (op == 4){}
         else if (op == 5){
-            cout << ' ' << rnd.next(1ll, (long long)1e18);
+            cout << ' ' << rnd.next(1ll, cur_dep * 2);
         }
         else if (op == 6){
             cout << ' ' << unassigned[cur].front().first << ' ' << unassigned[cur].front().second;
