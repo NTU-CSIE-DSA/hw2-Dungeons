@@ -98,7 +98,7 @@ value remaining is 5
 value lost at 0
 ```
 
-### Sample Input 4
+### Sample Input 4 (Bonus)
 ```
 5 2 13
 0 1 4

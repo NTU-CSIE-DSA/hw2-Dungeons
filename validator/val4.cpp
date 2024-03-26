@@ -43,6 +43,10 @@ int main(){
                 adj[cur].pop();
             }
         }
+        else if (op == 3){
+            inf.readSpace();
+            long long t = inf.readLong(0, (long long)1e18, "t_i");
+        }
         else if (op == 5){
             inf.readSpace();
             long long p = inf.readLong(0, (long long)1e18, "p_i");
