@@ -7,11 +7,6 @@
 
 typedef long long ll;
 
-typedef struct Vector {
-  unsigned int len, size;
-  ll *vec;
-} Vector;
-
 typedef struct List_node {
   int ord;
   ll v;
@@ -21,8 +16,8 @@ typedef struct List_node {
 int N, M, Q;
 int l[MAXN];
 int parent[MAXN];
-Vector chi[MAXN];
-int chi_cur[MAXN];
+List_node *chih[MAXN], *chit[MAXN];
+List_node *chi_cur[MAXN];
 List_node *llenh[MAXN], *llent[MAXN]; // longest length
 ll len_sum[MAXN];
 int path[MAXN];
@@ -33,21 +28,6 @@ List_node *tsh, *tst;
 
 int p_now;
 int d_now;
-
-void vec_init(Vector *new_vec) {
-  new_vec->len = 1;
-  new_vec->size = 0;
-  new_vec->vec = (ll *) calloc(1, sizeof(ll));
-}
-
-void vec_pb(Vector *vec, ll val) {
-  if (vec->size == vec->len) {
-    vec->len *= 2;
-    vec->vec = (ll *) realloc(vec->vec, vec->len * sizeof(ll));
-  }
-  vec->vec[vec->size] = val;
-  vec->size++;
-}
 
 void llen_pb(int ind, int ord, ll dis) {
   List_node *new_node = (List_node *)calloc(1, sizeof(List_node));
@@ -70,9 +50,12 @@ void llen_pb(int ind, int ord, ll dis) {
 }
 
 ll dfs(int ind) {
-  if (chi[ind].size == 0) return 0;
-  for (int i = 0; i < (int)chi[ind].size; i++)
-    llen_pb(ind, i, l[chi[ind].vec[i]] + dfs((int)chi[ind].vec[i]));
+  if (chih[ind] == NULL) return 0;
+  List_node *it = chih[ind];
+  while (it) {
+    llen_pb(ind, it->ord, l[it->v] + dfs((int)it->v));
+    it = it->nxt;
+  }
   return llenh[ind]->v;
 }
 
@@ -88,15 +71,23 @@ void update(int ind) {
 
 
 signed main() {
-  for (int i = 0; i < MAXN; i++) vec_init(&chi[i]);
-
   scanf("%d%d%d", &N, &M, &Q);
 
   for (int i = 0; i < M; i++) {
     int u, v;
     scanf("%d%d", &u, &v);
     scanf("%d", &l[v]);
-    vec_pb(&chi[u], v);
+    List_node *new_node = (List_node*)calloc(1, sizeof(List_node));
+    new_node->v = v;
+    if (chit[u]) {
+      new_node->ord = chit[u]->ord+1;
+      chit[u]->nxt = new_node;
+      new_node->prev = chit[u];
+    } else  {
+      new_node->ord = 0;
+      chih[u] = new_node;
+    }
+    chit[u] = new_node;
     parent[v] = u;
   }
   dfs(0);
@@ -104,13 +95,13 @@ signed main() {
     int instruction;
     scanf("%d", &instruction);
     if (instruction == 1) {
-      if (chi_cur[p_now] == (int)chi[p_now].size) {
+      if (!chih[p_now] || chi_cur[p_now] == chit[p_now]) {
         printf("-1\n");
         continue;
       }
-      int p_new = (int)chi[p_now].vec[chi_cur[p_now]];
-      chi_cur[p_now]++;
-      p_now = p_new;
+      if (chi_cur[p_now]) chi_cur[p_now] = chi_cur[p_now]->nxt;
+      else chi_cur[p_now] = chih[p_now];
+      p_now = (int)chi_cur[p_now]->v;
       printf("%d\n", p_now);
       d_now++;
       len_sum[d_now] = len_sum[d_now-1] + l[p_now];
@@ -156,7 +147,7 @@ signed main() {
       // printf("%d: ", L);
       printf("%d\n", path[L]);
     } else if (instruction == 4) {
-      while (llenh[p_now] && chi_cur[p_now] > llenh[p_now]->ord) {
+      while (chi_cur[p_now] && llenh[p_now] && chi_cur[p_now]->ord >= llenh[p_now]->ord) {
         List_node *tmp = llenh[p_now];
         llenh[p_now] = llenh[p_now]->nxt;
         free(tmp);
@@ -177,7 +168,14 @@ signed main() {
         continue;
       }
       List_node *new_node = (List_node *)calloc(1, sizeof(List_node));
-      new_node->ord = p_now;
+      // new_node->ord = p_now;
+      int L = 0, R = d_now;
+      while (L != R) {
+        int m = (L+R)/2;
+        if (p < len_sum[d_now] - len_sum[m]) L = m+1;
+        else R = m;
+      }
+      new_node->ord = parent[path[L]];
       new_node->v = p - len_sum[d_now];
       if (tst == NULL) {
         tsh = new_node;
@@ -192,7 +190,9 @@ signed main() {
       if (n_ts > d_now) {
         assert(treasure[p_now]);
         assert(tsh != NULL);
-        printf("%d %lld\n", tsh->ord, tsh->v);
+        if (tsh->v >= 0) printf("value remaining is %lld\n", tsh->v);
+        else printf("value lost at %d\n", tsh->ord);
+        // printf("%d %lld\n", tsh->ord, tsh->v);
         List_node *tmp = tsh;
         tsh = tsh->nxt;
         if (tsh == NULL) tst = NULL;
@@ -207,9 +207,21 @@ signed main() {
       int v;
       scanf("%d", &v);
       scanf("%d", &l[v]);
-      vec_pb(&chi[p_now], v);
+
+      List_node *new_node = (List_node*)calloc(1, sizeof(List_node));
+      new_node->v = v;
+      if (chit[p_now]) {
+        new_node->ord = chit[p_now]->ord+1;
+        chit[p_now]->nxt = new_node;
+        new_node->prev = chit[p_now];
+      } else  {
+        new_node->ord = 0;
+        chih[p_now] = new_node;
+      }
+      chit[p_now] = new_node;
       parent[v] = p_now;
-      llen_pb(p_now, chi[p_now].size-1, l[v] + dfs(v));
+
+      llen_pb(p_now, chit[p_now]->ord, l[v] + dfs(v));
       update(p_now);
     }
   }
