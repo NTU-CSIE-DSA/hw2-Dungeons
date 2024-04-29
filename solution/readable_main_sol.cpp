@@ -1,21 +1,3 @@
-# DSA 2024 Homework 2 Programming Problem 2 (Dungeons)
-# tutorial
-## basic part
-The structure of the dungeons is actually a tree rooted in $0$. The children of each node is given as a queue. Implement $n$ queues to store them. (Also doable with offline and allocating exact size arrays)
-
-This can solve the first two operations.
-
-While traversing, maintain a stack to record the current ancestry. Also record the depth of each node in the ancestry. Use binary search on the depth stack to solve operation 3.
-
-To solve operation 4, we can first find the furthest leaf from each node. All the leaf nodes have such value of $0$. Then, for all the non-leaf nodes, the answer is $\displaystyle\max_{c \in children} edge\_ length(c) + furthest\_ leaf(c)$. Finally, maintain a suffix maximum on the children queue implemented in the previous part.
-
-Whether a treasure will lose complete value is similar to op 3. Treasures in a consecutive range of dungeons will be moved together. Use linked-list-based queues to maintain a consecutive range of treasures. Also record the start and end node of each queue. When two queues meet, merge them. This can solve when the treasure is escorted out.
-
-## bonus part
-Now, tree will be updated during the traversal. Since a new edge is always pushed into the end of current node's queue, we are actually pushing a new value into the end of a suffix-maximum problem. This is a classic sliding window maximum problem. Maintain a deque to solve the problem.
-
-# sample code 
-```c
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -256,9 +238,3 @@ int main(){
         }
     }
 }
-```
-
-# common mistake
-+ 沒有好好處理queue merge
-
-# coding tips
