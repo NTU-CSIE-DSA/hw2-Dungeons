@@ -9,7 +9,7 @@ typedef long long ll;
 
 typedef struct Vector {
   unsigned int len, size;
-  ll *vec;
+  int *vec;
 } Vector;
 
 typedef struct List_node {
@@ -37,13 +37,13 @@ int d_now;
 void vec_init(Vector *new_vec) {
   new_vec->len = 1;
   new_vec->size = 0;
-  new_vec->vec = (ll *) calloc(1, sizeof(ll));
+  new_vec->vec = (int *) calloc(1, sizeof(int));
 }
 
-void vec_pb(Vector *vec, ll val) {
+void vec_pb(Vector *vec, int val) {
   if (vec->size == vec->len) {
     vec->len *= 2;
-    vec->vec = (ll *) realloc(vec->vec, vec->len * sizeof(ll));
+    vec->vec = (int *) realloc(vec->vec, vec->len * sizeof(int));
   }
   vec->vec[vec->size] = val;
   vec->size++;
@@ -83,7 +83,6 @@ void update(int ind) {
     llent[ind] = llent[ind]->prev;
     free(tmp);
   }
-  update(parent[ind]);
 }
 
 
@@ -177,7 +176,14 @@ signed main() {
         continue;
       }
       List_node *new_node = (List_node *)calloc(1, sizeof(List_node));
-      new_node->ord = p_now;
+      // new_node->ord = p_now;
+      int L = 0, R = d_now;
+      while (L != R) {
+        int m = (L+R)/2;
+        if (p < len_sum[d_now] - len_sum[m]) L = m+1;
+        else R = m;
+      }
+      new_node->ord = parent[path[L]];
       new_node->v = p - len_sum[d_now];
       if (tst == NULL) {
         tsh = new_node;
@@ -192,7 +198,9 @@ signed main() {
       if (n_ts > d_now) {
         assert(treasure[p_now]);
         assert(tsh != NULL);
-        printf("%d %lld\n", tsh->ord, tsh->v);
+        if (tsh->v >= 0) printf("value remaining is %lld\n", tsh->v);
+        else printf("value lost at %d\n", tsh->ord);
+        // printf("%d %lld\n", tsh->ord, tsh->v);
         List_node *tmp = tsh;
         tsh = tsh->nxt;
         if (tsh == NULL) tst = NULL;
