@@ -131,7 +131,7 @@ void push_front(struct queue_of_treasure* q, int neg_d, ll v){
         // Note that cur_queue[] array is not properly modified since that will require O(N) time.
         // The reason that it is not required is left as an exercise to the reader. :D
     }
-    // The most easiest part! Hurray!!!
+    // The easiest part! Hurray!!!
     else cur_queue[q->top] = q;
 }
 

@@ -127,7 +127,7 @@ struct queue_of_treasure* newQueue(int neg_d, long long v, int dep){
 
 // Popping from the head (front) of a queue
 void pop_front(struct queue_of_treasure* q){
-    // If the head is the same as tail  ->  queue only consists of one node  ->  delete the entire queue
+    // If the head is the same as tail -> queue only consists of one node -> delete the entire queue
     if (q -> head == q -> tail){
         free(q -> head);
         cur_queue[q -> bot] = NULL;
@@ -163,7 +163,7 @@ void pop_back(struct queue_of_treasure* q){
 // This function is complicated since we may result in merging queues.
 void push_front(struct queue_of_treasure* q, int neg_d, long long v){
     // Extend the queue by moving the top upwards by one.
-    --q -> top;
+    --(q -> top);
     q -> head = newQueueNode(q -> head, neg_d, v);
     q -> head -> nxt -> prv = q -> head;
     
@@ -189,10 +189,10 @@ void push_front(struct queue_of_treasure* q, int neg_d, long long v){
         q -> tail = cur_queue[q -> top] -> tail;
         q -> top = cur_queue[q -> top] -> top;
         cur_queue[q -> top] = q;
-        // Note that cur_queue[] array is not properly modified since that wilong long require O(N) time.
+        // Note that cur_queue[] array is not properly modified since that will require O(N) time.
         // The reason that it is not required is left as an exercise to the reader. :D
     }
-    // The most easiest part! Hurray!!!
+    // The easiest part! Hurray!!!
     else cur_queue[q -> top] = q;
 }
 
