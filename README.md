@@ -216,7 +216,7 @@ struct max_child_deque_node* newMaxChildNode(int c, long long v, struct max_chil
     return t;
 }
 
-// Though named as updatemx(), it is simply popping along long the element less than v,
+// Though named as updatemx(), it is simply popping all the element less than v,
 // and pushing the new element to the end of deque.
 void updatemx(int i, int c, long long v){
     // The popping part. Although this may appears O(N), the total count of popping is bounded to the elements pushed
