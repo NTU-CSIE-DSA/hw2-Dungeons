@@ -8,19 +8,19 @@ The structure of the dungeons is actually a tree rooted in $0$. The children of 
 
 This can solve the first two operations.
 
-While traversing, maintain a stack to record the current ancestry. Also record the depth of each node in the ancestry, which can be done by appending $\texttt{stack.top()} + \texttt{edge\\_length}$ to the stack during operation 1, and removing $\texttt{stack.top()}$ during operation 2. Use an array to implement so that we can quickly find the value with an index. Use binary search on the depth stack to solve operation 3. Assume the current node is $n$, root is $r$, $x$ is the node on the path from $r$ to $n$. If $\texttt{depth}[n] - \texttt{depth}[x] < \texttt{treasure\_value}$, then the treasure will lose its value from $r$ to $x$, otherwise, it will lose its value from $x$ to $n$.
+While traversing, maintain a stack to record the current ancestry. Also record the depth of each node in the ancestry, which can be done by appending $\texttt{stack.top()} + \texttt{edge\\_length}$ to the stack during operation 1, and removing $\texttt{stack.top()}$ during operation 2. Use an array to implement so that we can quickly find the value with an index. Use binary search on the depth stack to solve operation 3. Assume the current node is $n$, root is $r$, $x$ is the node on the path from $r$ to $n$. If $\texttt{depth}[n] - \texttt{depth}[x] < \texttt{treasure\\_value}$, then the treasure will lose its value from $r$ to $x$, otherwise, it will lose its value from $x$ to $n$.
 
-To solve operation 4, we can first find the furthest leaf from each node. All the leaf nodes have a value of $0$. Then, for all the non-leaf nodes, the answer is $\displaystyle\max_{c \in \texttt{children}} \texttt{edge\_length(c)} + \texttt{furthest\_leaf}(c)$. Finally, maintain a suffix maximum on the children queue implemented in the previous part. That is, assume the children of node $n$ are $c_1, c_2, \dots, c_k$ in order, then we can record:
+To solve operation 4, we can first find the furthest leaf from each node. All the leaf nodes have a value of $0$. Then, for all the non-leaf nodes, the answer is $\displaystyle\max_{c \in \texttt{children}} \texttt{edge\\_length(c)} + \texttt{furthest\\_leaf}(c)$. Finally, maintain a suffix maximum on the children queue implemented in the previous part. That is, assume the children of node $n$ are $c_1, c_2, \dots, c_k$ in order, then we can record:
 
 $$
 \begin{cases}
 \texttt{dis}[k + 1] &= 0\\
-\texttt{dis}[k] &= \texttt{edge\_length}(n, c_k) + \texttt{furthest\_leaf}(c_k)\\
-\texttt{dis}[i] &= \max\{\texttt{dis}[i + 1], \texttt{edge\_length}(n, c_i) + \texttt{furthest\_leaf}(c_i)\}\ , \forall 1\leq i\leq k - 1
+\texttt{dis}[k] &= \texttt{edge\\_length}(n, c_k) + \texttt{furthest\\_leaf}(c_k)\\
+\texttt{dis}[i] &= \max\{\texttt{dis}[i + 1], \texttt{edge\\_length}(n, c_i) + \texttt{furthest\\_leaf}(c_i)\}\ , \forall 1\leq i\leq k - 1
 \end{cases}
 $$
 
-If the edge from $n$ to $c_1, c_2, \dots, c_i$ is removed, then return $\texttt{dis}[i + 1]$ when queried. Also, remember to update $\texttt{furthest\_leaf}(n)$ to $\texttt{dis}[i + 1]$ when operation 2 moves from $c_i$ to node $n$.
+If the edge from $n$ to $c_1, c_2, \dots, c_i$ is removed, then return $\texttt{dis}[i + 1]$ when queried. Also, remember to update $\texttt{furthest\\_leaf}(n)$ to $\texttt{dis}[i + 1]$ when operation 2 moves from $c_i$ to node $n$.
 
 For operation 5, whether a treasure will lose complete value is similar to operation 3. Treasures in a consecutive range of dungeons will be moved together. Use linked-list-based queues to maintain a consecutive range of treasures. Also record the start and end node of each queue. When two queues meet, merge them. This can solve when the treasure is escorted out. If a treasure is escorted out when pushing a treasure to node $n$, then the queue starting from $n$ must end at the root. Pop the last element in the linked list and output it.
 
@@ -39,7 +39,7 @@ Reference: [Introduction to Monotonic Queues](https://www.geeksforgeeks.org/intr
 + Didn't properly handle the queue merge during operation 5.
 + Didn't consider that $v$ itself still has subtrees when performing operation 6.
 + Various strange pointers are poorly written. e.g. get the value from NULL pointer.
-+ Didn't initialize the data, meaning you should make all the treasure queues empty at first and set $\texttt{furthest\_leaf}$ to 0, then do a DFS to update $\texttt{furthest\_leaf}$.
++ Didn't initialize the data, meaning you should make all the treasure queues empty at first and set $\texttt{furthest\\_leaf}$ to 0, then do a DFS to update $\texttt{furthest\\_leaf}$.
 + $O(n\log n)$ space complexity, it may lead to MLE.
 
 # Coding Tips
