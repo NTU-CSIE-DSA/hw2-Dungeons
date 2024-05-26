@@ -1,6 +1,6 @@
 # DSA 2024 Homework 2 Programming Problem 2 (Dungeons)
 
-# tutorial
+# Tutorial
 
 ## Basic Part
 
@@ -10,7 +10,7 @@ This can solve the first two operations.
 
 While traversing, maintain a stack to record the current ancestry. Also record the depth of each node in the ancestry, which can be done by appending $\texttt{stack.top()} + \texttt{edge\\_length}$ to the stack during operation 1, and removing $\texttt{stack.top()}$ during operation 2. Use an array to implement so that we can quickly find the value with an index. Use binary search on the depth stack to solve operation 3. Assume the current node is $n$, root is $r$, $x$ is the node on the path from $r$ to $n$. If $\texttt{depth}[n] - \texttt{depth}[x] < \texttt{treasure\\_value}$, then the treasure will lose its value from $r$ to $x$, otherwise, it will lose its value from $x$ to $n$.
 
-To solve operation 4, we can first find the furthest leaf from each node. All the leaf nodes have a value of $0$. Then, for all the non-leaf nodes, the answer is $\displaystyle\max_{c \in \texttt{children}} \texttt{edge\\_length(c)} + \texttt{furthest\\_leaf}(c)$. Finally, maintain a suffix maximum on the children queue implemented in the previous part. That is, assume the children of node $n$ are $c_1, c_2, \dots, c_k$ in order, then we can record:
+To solve operation 4, we can first find the furthest leaf from each node. All the leaf nodes have a value of $0$. Then, for all the non-leaf nodes, the answer is $\displaystyle\max_{c \in \texttt{children}} \texttt{edge\\_length}(c) + \texttt{furthest\\_leaf}(c)$. Finally, maintain a suffix maximum on the children queue implemented in the previous part. That is, assume the children of node $n$ are $c_1, c_2, \dots, c_k$ in order, then we can record:
 
 $$
 \begin{cases}
@@ -30,7 +30,7 @@ Now, the tree will be updated during the traversal, which will only affect opera
 
 When appending a child after a node, we can ignore the children with less depth in the previous, as the new child will be removed after the previous children. Thus, we can maintain a queue with child order along with decreasing order of depth. When inserting a new child behind, remove the nodes with depth less than the new child in the queue (the last few elements). When removing a child, check whether the first element in the queue has the same index as the removed child. If so, remove the first element in the queue. When querying, output the depth of the first element.
 
-The time complexity of initialize is $O(n)$, the time complexity for each operation $1, 2, 4, 6$ is $O(1)$, and for each operation $3, 5$ is $O(log(n))$, so the total time complexity is $O(n + q\log n)$
+The time complexity of initialization is $O(n)$, the time complexity for each operation $1, 2, 4, 6$ is $O(1)$, and for each operation $3, 5$ is $O(\log(n))$, so the total time complexity is $O(n + q\log n)$
 
 Reference: [Introduction to Monotonic Queues](https://www.geeksforgeeks.org/introduction-to-monotonic-queues/)
 
@@ -48,7 +48,7 @@ Reference: [Introduction to Monotonic Queues](https://www.geeksforgeeks.org/intr
 + There are many variables, so naming the variables properly can also help with debugging.
 
 
-# sample code 
+# Sample Code 
 
 The code below is the copy of `./solution/readable_main_sol.cpp`. They are identical.
 
