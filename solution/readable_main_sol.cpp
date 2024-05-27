@@ -13,41 +13,43 @@ Anyway, enjoy more than 200 lines of code!
 #include <stdbool.h>
 #include <stdlib.h>
 
-#define maxn (int)(1e6+10)
+#define MAX_N (int)(1e6+10)
 
 // Declaration of some structs that are going to be used
 
 // The stack is an array-based stack that allows random-access to the current dfs stack.
-int stack[maxn];
+int stack[MAX_N];
 
 // This array stores the depth of each layer.
 // Each layer is a node visited and stored in the previous stack and depth is the distance to root.
-long long depth[maxn];
+long long depth[MAX_N];
 
 // This is the node to store the children of each parent node
-struct child_queue_node{
-    struct child_queue_node* nxt; // The next child
-    int c, d; // The index of node of this child, the distance to that node
-} *head[maxn], *tail[maxn];
+typedef struct child_queue_node {
+    struct child_queue_node* nxt;  // The next child
+    int c, d;                      // The index of node of this child, the distance to that node
+} ChildQueueNode;
 
-struct child_queue_node* newChild(int c, int d){
-    struct child_queue_node* t = (struct child_queue_node*) malloc(sizeof(struct child_queue_node));
-    t -> nxt = NULL; // Newest child is always the last in the queue so it is initialized as NULL
+ChildQueueNode *head[MAX_N], *tail[MAX_N];
+
+ChildQueueNode* newChild(int c, int d) {
+    ChildQueueNode* t = (ChildQueueNode*) malloc(sizeof(ChildQueueNode));
+    t -> nxt = NULL;  // Newest child is always the last in the queue so it is initialized as NULL
     t -> c = c;
     t -> d = d;
     return t;
 };
 
 // This is the node of queues that are created to deal with operation 5
-struct treasure_node{
-    struct treasure_node *prv, *nxt; // Doubly-linked list is required
-    int neg_d; // The position that the value of the treasure becomes negative
-    long long v; // The remaining value of the treasure
-};
+typedef struct treasure_node {
+    struct treasure_node *prv, *nxt;  // Doubly-linked list is required
+    int neg_d;                        // The position that the value of the treasure becomes negative
+    long long v;                      // The remaining value of the treasure
+} TreasureNode;
 
-struct treasure_node* newQueueNode(struct treasure_node* oriHead, int neg_d, long long v){
-    struct treasure_node* t = (struct treasure_node*) malloc(sizeof(struct treasure_node));
-    t -> nxt = oriHead; // The new treasure is always pushed into the head of the queue
+TreasureNode* newQueueNode(TreasureNode* oriHead, int neg_d, long long v) {
+    TreasureNode* t = (TreasureNode*) malloc(sizeof(TreasureNode));
+    t -> nxt = oriHead;  // The new treasure is always pushed into the head of the queue
     t -> neg_d = neg_d;
     t -> v = v;
     return t;
@@ -57,13 +59,15 @@ struct treasure_node* newQueueNode(struct treasure_node* oriHead, int neg_d, lon
 // Note that it is actually a deque. However, I found it easier to understand by regarding it as a queue since the 
 // push_front() here is releatively irrelevant. If you find it weird that a queue have pop_front(),
 // then you are actually correct. :D
-struct queue_of_treasure{
-    struct treasure_node *head, *tail; // The head and tail nodes
-    int top, bot; // As a queue of treasures 
-} *cur_queue[maxn]; // This array of pointer stores which queue each node belongs to
+typedef struct queue_of_treasure {
+    TreasureNode *head, *tail;  // The head and tail nodes
+    int top, bot;               // As a queue of treasures 
+} TreasureQueue;
 
-struct queue_of_treasure* newQueue(int neg_d, long long v, int dep){
-    struct queue_of_treasure* t = (struct queue_of_treasure*) malloc(sizeof(struct queue_of_treasure));
+TreasureQueue *cur_queue[MAX_N];  // This array of pointer stores which queue each node belongs to
+
+TreasureQueue* newQueue(int neg_d, long long v, int dep) {
+    TreasureQueue* t = (TreasureQueue*) malloc(sizeof(TreasureQueue));
     t -> bot = t -> top = dep;
     t -> head = t -> tail = newQueueNode(NULL, neg_d, v);
     t -> head -> nxt = t -> head -> prv = NULL;
@@ -71,15 +75,15 @@ struct queue_of_treasure* newQueue(int neg_d, long long v, int dep){
 }
 
 // Popping from the head (front) of a queue
-void pop_front(struct queue_of_treasure* q){
+void pop_front(TreasureQueue* q) {
     // If the head is the same as tail -> queue only consists of one node -> delete the entire queue
-    if (q -> head == q -> tail){
+    if (q -> head == q -> tail) {
         free(q -> head);
         cur_queue[q -> bot] = NULL;
         free(q);
     }
     // Remove the head
-    else{
+    else {
         q -> head = q -> head -> nxt;
         free(q -> head -> prv);
         q -> head -> prv = NULL;
@@ -91,13 +95,13 @@ void pop_front(struct queue_of_treasure* q){
 
 // Popping from the tail (back) of a queue
 // Note that it is very similar to pop_front()
-void pop_back(struct queue_of_treasure* q){
-    if (q -> head == q -> tail){
+void pop_back(TreasureQueue* q) {
+    if (q -> head == q -> tail) {
         free(q -> head);
         cur_queue[q -> bot] = NULL;
         free(q);
     }
-    else{
+    else {
         q -> tail = q -> tail -> prv;
         free(q -> tail -> nxt);
         q -> tail -> nxt = NULL;
@@ -106,14 +110,14 @@ void pop_back(struct queue_of_treasure* q){
 
 // Pushing to the head (front) of the queue
 // This function is complicated since we may result in merging queues.
-void push_front(struct queue_of_treasure* q, int neg_d, long long v){
+void push_front(TreasureQueue* q, int neg_d, long long v) {
     // Extend the queue by moving the top upwards by one.
     --(q -> top);
     q -> head = newQueueNode(q -> head, neg_d, v);
     q -> head -> nxt -> prv = q -> head;
     
     // If the top of queue reached root, print the treasure on top.
-    if (q -> top == 0){
+    if (q -> top == 0) {
         if (q -> tail -> v >= 0) printf("value remaining is %lld\n", q -> tail -> v);
         else printf("value lost at %d\n", q -> tail -> neg_d);
         pop_back(q);
@@ -123,7 +127,7 @@ void push_front(struct queue_of_treasure* q, int neg_d, long long v){
     // The implementation of this part may have multiple different approaches.
     // The one provided below may not be the cleanest nor the simplest. It is just the one that I thought of when
     // writing the main solution.
-    else if (cur_queue[q -> top] != NULL){
+    else if (cur_queue[q -> top] != NULL) {
         // First, push the top of current queue to the upper queue
         push_front(cur_queue[q -> top], q -> tail -> neg_d, q -> tail -> v);
         // Then, pop that node out.
@@ -146,14 +150,16 @@ void push_front(struct queue_of_treasure* q, int neg_d, long long v){
 // https://leetcode.com/problems/sliding-window-maximum
 // The deque below is the sliding window maximum deque with additional metadata (t -> c) to determine the popping time.
 // The rest is a normal implementation of the classic problem.
-struct max_child_deque_node{
+typedef struct max_child_deque_node {
     int c;
     long long mxv;
     struct max_child_deque_node *prv, *nxt;
-} *mxc_head[maxn], *mxc_tail[maxn];
+} MaxChildDequeNode;
 
-struct max_child_deque_node* newMaxChildNode(int c, long long v, struct max_child_deque_node *prv){
-    struct max_child_deque_node* t = (struct max_child_deque_node*) malloc(sizeof(struct max_child_deque_node));
+MaxChildDequeNode *mxc_head[MAX_N], *mxc_tail[MAX_N];
+
+MaxChildDequeNode* newMaxChildNode(int c, long long v, MaxChildDequeNode *prv) {
+    MaxChildDequeNode* t = (MaxChildDequeNode*) malloc(sizeof(MaxChildDequeNode));
     t -> c = c;
     t -> mxv = v;
     t -> prv = prv;
@@ -163,28 +169,28 @@ struct max_child_deque_node* newMaxChildNode(int c, long long v, struct max_chil
 
 // Though named as updatemx(), it is simply popping all the element less than v,
 // and pushing the new element to the end of deque.
-void updatemx(int i, int c, long long v){
+void updatemx(int i, int c, long long v) {
     // The popping part. Although this may appears O(N), the total count of popping is bounded to the elements pushed
     // so the time required is O(N) throughout the entire lifespan of a deque and O(N)/N = O(1) per update.
-    while (mxc_tail[i] != NULL && v > mxc_tail[i] -> mxv){
-        struct max_child_deque_node* tmp = mxc_tail[i];
+    while (mxc_tail[i] != NULL && v > mxc_tail[i] -> mxv) {
+        MaxChildDequeNode* tmp = mxc_tail[i];
         mxc_tail[i] = mxc_tail[i] -> prv;
         free(tmp);
     }
 
     // Finally, push into the deque.
-    if (mxc_tail[i] == NULL){
+    if (mxc_tail[i] == NULL) {
         mxc_head[i] = mxc_tail[i] = newMaxChildNode(c, v, NULL);
     }
-    else{
+    else {
         mxc_tail[i] -> nxt = newMaxChildNode(c, v, mxc_tail[i]);
         mxc_tail[i] = mxc_tail[i] -> nxt;
     }
 }
 
 // dfs() to find the furthest leaf.
-long long dfs(int x){
-    for (struct child_queue_node* c = head[x];c!=NULL;c=c -> nxt){
+long long dfs(int x) {
+    for (ChildQueueNode* c = head[x];c!=NULL;c=c -> nxt) {
         // For each child, find the deepest leaf within the subtree and add that with the distance to the child.
         // Update the value into the deque.
         updatemx(x, c -> c, c -> d + dfs(c -> c));
@@ -196,9 +202,9 @@ long long dfs(int x){
 }
 
 // A nice, simple, classic, elegant binary search on a stack.
-int bin_search(long long x, int cur_layer){
+int bin_search(long long x, int cur_layer) {
     int l = 0, r = cur_layer;
-    while (l != r){
+    while (l != r) {
         int m = (l + r) / 2;
         if (depth[m] >= x) r = m;
         else l = m + 1;
@@ -206,27 +212,27 @@ int bin_search(long long x, int cur_layer){
     return l;
 }
 
-int main(){
+int main() {
     int n, m, q;
 
     scanf("%d%d%d", &n, &m, &q);
 
     // Initializtion
-    for (int i=0;i<n;++i){
+    for (int i=0;i<n;++i) {
         cur_queue[i] = NULL;
         head[i] = tail[i] = NULL;
         mxc_head[i] = mxc_tail[i] = NULL;
     }
 
     // Input of the initial edges.
-    while (m--){
+    while (m--) {
         int u, v, w;
 
         scanf("%d%d%d", &u, &v, &w);
-        if (head[u] == NULL){
+        if (head[u] == NULL) {
             head[u] = tail[u] = newChild(v, w);
         }
-        else{
+        else {
             tail[u] -> nxt = newChild(v, w);
             tail[u] = tail[u] -> nxt;
         }
@@ -237,13 +243,13 @@ int main(){
 
     // cur for current node, cur_layer for current layer
     int cur = 0, cur_layer = 0;
-    while (q--){
+    while (q--) {
         int op;
 
         scanf("%d", &op);
-        if (op == 1){
+        if (op == 1) {
             // Going downwards
-            if (head[cur] != NULL){
+            if (head[cur] != NULL) {
                 printf("%d\n", head[cur] -> c);
                 // The depth array acts as an stack that stores depth of each layer in the tree.
                 // It can help solve operation 3 and 5.
@@ -255,10 +261,10 @@ int main(){
             else printf("-1\n");
         }
 
-        else if (op == 2){
+        else if (op == 2) {
             // Going upwards
-            if (cur){ // If cur == 0, it is at root so no operations are required
-                if (cur_queue[cur_layer] != NULL){
+            if (cur) { // If cur == 0, it is at root so no operations are required
+                if (cur_queue[cur_layer] != NULL) {
                     pop_front(cur_queue[cur_layer]);
                 }
 
@@ -266,8 +272,8 @@ int main(){
 
                 // If the subtree deleted is the where the current longest leaf belongs to,
                 // we have to delete that node from the queue for operation 4
-                if (mxc_head[cur] -> c == head[cur] -> c){
-                    struct max_child_deque_node* tmp = mxc_head[cur];
+                if (mxc_head[cur] -> c == head[cur] -> c) {
+                    MaxChildDequeNode* tmp = mxc_head[cur];
                     mxc_head[cur] = mxc_head[cur] -> nxt;
                     free(tmp);
 
@@ -276,7 +282,7 @@ int main(){
                 }
 
                 // Simply remove the first node (aka the child we just came from) in the child queue
-                struct child_queue_node* tmp = head[cur];
+                ChildQueueNode* tmp = head[cur];
                 head[cur] = head[cur] -> nxt;
                 free(tmp);
                 printf("%d\n", cur);
@@ -286,7 +292,7 @@ int main(){
             else printf("-1\n");
         }
 
-        else if (op == 3){
+        else if (op == 3) {
             long long t;
 
             scanf("%lld", &t);
@@ -294,7 +300,7 @@ int main(){
             printf("%d\n", stack[bin_search(depth[cur_layer] - t, cur_layer)]);
         }
 
-        else if (op == 4){
+        else if (op == 4) {
             // Note that the bonus part only affects operation 4 and the implementation here is for the bonus version.
             // Basic: 
             // A dfs is done in the beginning so we already knew the furthest leaf within each subtree.
@@ -307,7 +313,7 @@ int main(){
             else {printf("%lld\n", mxc_head[cur] -> mxv);}
         }
 
-        else if (op == 5){
+        else if (op == 5) {
             long long p;
 
             scanf("%lld", &p);
@@ -318,26 +324,26 @@ int main(){
 
             // Store the treasure into the treasure queue.
             // If no treasure in current layer, simply create one.
-            if (cur_queue[cur_layer] == NULL){
+            if (cur_queue[cur_layer] == NULL) {
                 cur_queue[cur_layer] = newQueue(neg_id ? stack[neg_id - 1] : -1, p, cur_layer);
             }
             // Else, push it in the head of current queue. The rest of pushing treasures upwards is handled by the
             // function push_front().
-            else{
+            else {
                 push_front(cur_queue[cur_layer], neg_id ? stack[neg_id - 1] : -1, p);
             }
         }
 
-        else{
+        else {
             // Bonus operation!
             int v, l;
 
             scanf("%d%d", &v, &l);
             // Here is relatively simple, we just push to the tail of child queue.
-            if (head[cur] == NULL){
+            if (head[cur] == NULL) {
                 head[cur] = tail[cur] = newChild(v, l);
             }
-            else{
+            else {
                 tail[cur] -> nxt = newChild(v, l);
                 tail[cur] = tail[cur] -> nxt;
             }
